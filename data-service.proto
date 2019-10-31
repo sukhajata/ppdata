@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package ppdata;
+
+message InstMsgRequest {
+    int32 startTime = 1;
+    string deviceEUI = 2;
+}
+
+message InstMsgData {
+    repeated InstMsgDatum rows = 1;
+}
+
+message InstMsgDatum {
+    int32 timestamp = 1;
+    int32 phase = 2;
+    float voltage = 3;
+    float current = 4;
+}
+
+service DeviceDataService {
+    rpc GetInstMsgData(InstMsgRequest) returns (InstMsgData) {}
+}
