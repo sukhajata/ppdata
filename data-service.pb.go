@@ -24,47 +24,47 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type InstMsgRequest struct {
-	StartTime            int32    `protobuf:"varint,1,opt,name=startTime,proto3" json:"startTime,omitempty"`
+type DataMsgRequest struct {
+	StartTime            string   `protobuf:"bytes,1,opt,name=startTime,proto3" json:"startTime,omitempty"`
 	DeviceEUI            string   `protobuf:"bytes,2,opt,name=deviceEUI,proto3" json:"deviceEUI,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *InstMsgRequest) Reset()         { *m = InstMsgRequest{} }
-func (m *InstMsgRequest) String() string { return proto.CompactTextString(m) }
-func (*InstMsgRequest) ProtoMessage()    {}
-func (*InstMsgRequest) Descriptor() ([]byte, []int) {
+func (m *DataMsgRequest) Reset()         { *m = DataMsgRequest{} }
+func (m *DataMsgRequest) String() string { return proto.CompactTextString(m) }
+func (*DataMsgRequest) ProtoMessage()    {}
+func (*DataMsgRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_60c109ad3fe637bb, []int{0}
 }
 
-func (m *InstMsgRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_InstMsgRequest.Unmarshal(m, b)
+func (m *DataMsgRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DataMsgRequest.Unmarshal(m, b)
 }
-func (m *InstMsgRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_InstMsgRequest.Marshal(b, m, deterministic)
+func (m *DataMsgRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DataMsgRequest.Marshal(b, m, deterministic)
 }
-func (m *InstMsgRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InstMsgRequest.Merge(m, src)
+func (m *DataMsgRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DataMsgRequest.Merge(m, src)
 }
-func (m *InstMsgRequest) XXX_Size() int {
-	return xxx_messageInfo_InstMsgRequest.Size(m)
+func (m *DataMsgRequest) XXX_Size() int {
+	return xxx_messageInfo_DataMsgRequest.Size(m)
 }
-func (m *InstMsgRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_InstMsgRequest.DiscardUnknown(m)
+func (m *DataMsgRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DataMsgRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_InstMsgRequest proto.InternalMessageInfo
+var xxx_messageInfo_DataMsgRequest proto.InternalMessageInfo
 
-func (m *InstMsgRequest) GetStartTime() int32 {
+func (m *DataMsgRequest) GetStartTime() string {
 	if m != nil {
 		return m.StartTime
 	}
-	return 0
+	return ""
 }
 
-func (m *InstMsgRequest) GetDeviceEUI() string {
+func (m *DataMsgRequest) GetDeviceEUI() string {
 	if m != nil {
 		return m.DeviceEUI
 	}
@@ -111,10 +111,12 @@ func (m *InstMsgData) GetRows() []*InstMsgDatum {
 }
 
 type InstMsgDatum struct {
-	Timestamp            int32    `protobuf:"varint,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Timestamp            string   `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	Phase                int32    `protobuf:"varint,2,opt,name=phase,proto3" json:"phase,omitempty"`
-	Voltage              float32  `protobuf:"fixed32,3,opt,name=voltage,proto3" json:"voltage,omitempty"`
-	Current              float32  `protobuf:"fixed32,4,opt,name=current,proto3" json:"current,omitempty"`
+	Activepower          float32  `protobuf:"fixed32,3,opt,name=activepower,proto3" json:"activepower,omitempty"`
+	Reactivepower        float32  `protobuf:"fixed32,4,opt,name=reactivepower,proto3" json:"reactivepower,omitempty"`
+	Current              float32  `protobuf:"fixed32,5,opt,name=current,proto3" json:"current,omitempty"`
+	Voltage              float32  `protobuf:"fixed32,6,opt,name=voltage,proto3" json:"voltage,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -145,11 +147,11 @@ func (m *InstMsgDatum) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_InstMsgDatum proto.InternalMessageInfo
 
-func (m *InstMsgDatum) GetTimestamp() int32 {
+func (m *InstMsgDatum) GetTimestamp() string {
 	if m != nil {
 		return m.Timestamp
 	}
-	return 0
+	return ""
 }
 
 func (m *InstMsgDatum) GetPhase() int32 {
@@ -159,9 +161,16 @@ func (m *InstMsgDatum) GetPhase() int32 {
 	return 0
 }
 
-func (m *InstMsgDatum) GetVoltage() float32 {
+func (m *InstMsgDatum) GetActivepower() float32 {
 	if m != nil {
-		return m.Voltage
+		return m.Activepower
+	}
+	return 0
+}
+
+func (m *InstMsgDatum) GetReactivepower() float32 {
+	if m != nil {
+		return m.Reactivepower
 	}
 	return 0
 }
@@ -173,32 +182,600 @@ func (m *InstMsgDatum) GetCurrent() float32 {
 	return 0
 }
 
+func (m *InstMsgDatum) GetVoltage() float32 {
+	if m != nil {
+		return m.Voltage
+	}
+	return 0
+}
+
+type ProcMsgData struct {
+	Rows                 []*ProcMsgDatum `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *ProcMsgData) Reset()         { *m = ProcMsgData{} }
+func (m *ProcMsgData) String() string { return proto.CompactTextString(m) }
+func (*ProcMsgData) ProtoMessage()    {}
+func (*ProcMsgData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{3}
+}
+
+func (m *ProcMsgData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProcMsgData.Unmarshal(m, b)
+}
+func (m *ProcMsgData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProcMsgData.Marshal(b, m, deterministic)
+}
+func (m *ProcMsgData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProcMsgData.Merge(m, src)
+}
+func (m *ProcMsgData) XXX_Size() int {
+	return xxx_messageInfo_ProcMsgData.Size(m)
+}
+func (m *ProcMsgData) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProcMsgData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProcMsgData proto.InternalMessageInfo
+
+func (m *ProcMsgData) GetRows() []*ProcMsgDatum {
+	if m != nil {
+		return m.Rows
+	}
+	return nil
+}
+
+type ProcMsgDatum struct {
+	Timestamp            string   `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Phase                int32    `protobuf:"varint,2,opt,name=phase,proto3" json:"phase,omitempty"`
+	Loopimpedance        int32    `protobuf:"varint,3,opt,name=loopimpedance,proto3" json:"loopimpedance,omitempty"`
+	Rssi                 int32    `protobuf:"varint,4,opt,name=rssi,proto3" json:"rssi,omitempty"`
+	Snr                  int32    `protobuf:"varint,5,opt,name=snr,proto3" json:"snr,omitempty"`
+	Alivecnt             int32    `protobuf:"varint,6,opt,name=alivecnt,proto3" json:"alivecnt,omitempty"`
+	Saifi                int32    `protobuf:"varint,7,opt,name=saifi,proto3" json:"saifi,omitempty"`
+	Memfree              int32    `protobuf:"varint,8,opt,name=memfree,proto3" json:"memfree,omitempty"`
+	Tempcnt              int32    `protobuf:"varint,9,opt,name=tempcnt,proto3" json:"tempcnt,omitempty"`
+	Sustainedcnt         int32    `protobuf:"varint,10,opt,name=sustainedcnt,proto3" json:"sustainedcnt,omitempty"`
+	Prolongedcnt         int32    `protobuf:"varint,11,opt,name=prolongedcnt,proto3" json:"prolongedcnt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProcMsgDatum) Reset()         { *m = ProcMsgDatum{} }
+func (m *ProcMsgDatum) String() string { return proto.CompactTextString(m) }
+func (*ProcMsgDatum) ProtoMessage()    {}
+func (*ProcMsgDatum) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{4}
+}
+
+func (m *ProcMsgDatum) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProcMsgDatum.Unmarshal(m, b)
+}
+func (m *ProcMsgDatum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProcMsgDatum.Marshal(b, m, deterministic)
+}
+func (m *ProcMsgDatum) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProcMsgDatum.Merge(m, src)
+}
+func (m *ProcMsgDatum) XXX_Size() int {
+	return xxx_messageInfo_ProcMsgDatum.Size(m)
+}
+func (m *ProcMsgDatum) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProcMsgDatum.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProcMsgDatum proto.InternalMessageInfo
+
+func (m *ProcMsgDatum) GetTimestamp() string {
+	if m != nil {
+		return m.Timestamp
+	}
+	return ""
+}
+
+func (m *ProcMsgDatum) GetPhase() int32 {
+	if m != nil {
+		return m.Phase
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetLoopimpedance() int32 {
+	if m != nil {
+		return m.Loopimpedance
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetRssi() int32 {
+	if m != nil {
+		return m.Rssi
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetSnr() int32 {
+	if m != nil {
+		return m.Snr
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetAlivecnt() int32 {
+	if m != nil {
+		return m.Alivecnt
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetSaifi() int32 {
+	if m != nil {
+		return m.Saifi
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetMemfree() int32 {
+	if m != nil {
+		return m.Memfree
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetTempcnt() int32 {
+	if m != nil {
+		return m.Tempcnt
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetSustainedcnt() int32 {
+	if m != nil {
+		return m.Sustainedcnt
+	}
+	return 0
+}
+
+func (m *ProcMsgDatum) GetProlongedcnt() int32 {
+	if m != nil {
+		return m.Prolongedcnt
+	}
+	return 0
+}
+
+type PQMsgData struct {
+	Rows                 []*PQMsgDatum `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *PQMsgData) Reset()         { *m = PQMsgData{} }
+func (m *PQMsgData) String() string { return proto.CompactTextString(m) }
+func (*PQMsgData) ProtoMessage()    {}
+func (*PQMsgData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{5}
+}
+
+func (m *PQMsgData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PQMsgData.Unmarshal(m, b)
+}
+func (m *PQMsgData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PQMsgData.Marshal(b, m, deterministic)
+}
+func (m *PQMsgData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PQMsgData.Merge(m, src)
+}
+func (m *PQMsgData) XXX_Size() int {
+	return xxx_messageInfo_PQMsgData.Size(m)
+}
+func (m *PQMsgData) XXX_DiscardUnknown() {
+	xxx_messageInfo_PQMsgData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PQMsgData proto.InternalMessageInfo
+
+func (m *PQMsgData) GetRows() []*PQMsgDatum {
+	if m != nil {
+		return m.Rows
+	}
+	return nil
+}
+
+type PQMsgDatum struct {
+	Timestamp             string   `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Phase                 int32    `protobuf:"varint,2,opt,name=phase,proto3" json:"phase,omitempty"`
+	VoltageMax            float32  `protobuf:"fixed32,3,opt,name=voltageMax,proto3" json:"voltageMax,omitempty"`
+	CurrentMax            float32  `protobuf:"fixed32,4,opt,name=currentMax,proto3" json:"currentMax,omitempty"`
+	PowerActiveMax        float32  `protobuf:"fixed32,5,opt,name=powerActiveMax,proto3" json:"powerActiveMax,omitempty"`
+	PowerReactiveMax      float32  `protobuf:"fixed32,6,opt,name=powerReactiveMax,proto3" json:"powerReactiveMax,omitempty"`
+	ThdvMax               float32  `protobuf:"fixed32,7,opt,name=thdvMax,proto3" json:"thdvMax,omitempty"`
+	VoltageSMA            float32  `protobuf:"fixed32,8,opt,name=voltageSMA,proto3" json:"voltageSMA,omitempty"`
+	CurrentSMA            float32  `protobuf:"fixed32,9,opt,name=currentSMA,proto3" json:"currentSMA,omitempty"`
+	PowerActiveSMA        float32  `protobuf:"fixed32,10,opt,name=powerActiveSMA,proto3" json:"powerActiveSMA,omitempty"`
+	PowerReactiveSMA      float32  `protobuf:"fixed32,11,opt,name=powerReactiveSMA,proto3" json:"powerReactiveSMA,omitempty"`
+	ThdvSMA               float32  `protobuf:"fixed32,12,opt,name=thdvSMA,proto3" json:"thdvSMA,omitempty"`
+	VoltageMin            float32  `protobuf:"fixed32,13,opt,name=voltageMin,proto3" json:"voltageMin,omitempty"`
+	CurrentMin            float32  `protobuf:"fixed32,14,opt,name=currentMin,proto3" json:"currentMin,omitempty"`
+	PowerActiveMin        float32  `protobuf:"fixed32,15,opt,name=powerActiveMin,proto3" json:"powerActiveMin,omitempty"`
+	PowerReactiveMin      float32  `protobuf:"fixed32,16,opt,name=powerReactiveMin,proto3" json:"powerReactiveMin,omitempty"`
+	ThdvMin               float32  `protobuf:"fixed32,17,opt,name=thdvMin,proto3" json:"thdvMin,omitempty"`
+	MomentarySag          int32    `protobuf:"varint,18,opt,name=momentarySag,proto3" json:"momentarySag,omitempty"`
+	MomentarySwell        int32    `protobuf:"varint,19,opt,name=momentarySwell,proto3" json:"momentarySwell,omitempty"`
+	TemporarySag          int32    `protobuf:"varint,20,opt,name=temporarySag,proto3" json:"temporarySag,omitempty"`
+	TemporarySwell        int32    `protobuf:"varint,21,opt,name=temporarySwell,proto3" json:"temporarySwell,omitempty"`
+	SustainedUnderVoltage int32    `protobuf:"varint,22,opt,name=sustainedUnderVoltage,proto3" json:"sustainedUnderVoltage,omitempty"`
+	SustainedOverVoltage  int32    `protobuf:"varint,23,opt,name=sustainedOverVoltage,proto3" json:"sustainedOverVoltage,omitempty"`
+	ProlongedUnderVoltage int32    `protobuf:"varint,24,opt,name=prolongedUnderVoltage,proto3" json:"prolongedUnderVoltage,omitempty"`
+	ProlongedOverVoltage  int32    `protobuf:"varint,25,opt,name=prolongedOverVoltage,proto3" json:"prolongedOverVoltage,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
+}
+
+func (m *PQMsgDatum) Reset()         { *m = PQMsgDatum{} }
+func (m *PQMsgDatum) String() string { return proto.CompactTextString(m) }
+func (*PQMsgDatum) ProtoMessage()    {}
+func (*PQMsgDatum) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{6}
+}
+
+func (m *PQMsgDatum) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PQMsgDatum.Unmarshal(m, b)
+}
+func (m *PQMsgDatum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PQMsgDatum.Marshal(b, m, deterministic)
+}
+func (m *PQMsgDatum) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PQMsgDatum.Merge(m, src)
+}
+func (m *PQMsgDatum) XXX_Size() int {
+	return xxx_messageInfo_PQMsgDatum.Size(m)
+}
+func (m *PQMsgDatum) XXX_DiscardUnknown() {
+	xxx_messageInfo_PQMsgDatum.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PQMsgDatum proto.InternalMessageInfo
+
+func (m *PQMsgDatum) GetTimestamp() string {
+	if m != nil {
+		return m.Timestamp
+	}
+	return ""
+}
+
+func (m *PQMsgDatum) GetPhase() int32 {
+	if m != nil {
+		return m.Phase
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetVoltageMax() float32 {
+	if m != nil {
+		return m.VoltageMax
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetCurrentMax() float32 {
+	if m != nil {
+		return m.CurrentMax
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerActiveMax() float32 {
+	if m != nil {
+		return m.PowerActiveMax
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerReactiveMax() float32 {
+	if m != nil {
+		return m.PowerReactiveMax
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetThdvMax() float32 {
+	if m != nil {
+		return m.ThdvMax
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetVoltageSMA() float32 {
+	if m != nil {
+		return m.VoltageSMA
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetCurrentSMA() float32 {
+	if m != nil {
+		return m.CurrentSMA
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerActiveSMA() float32 {
+	if m != nil {
+		return m.PowerActiveSMA
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerReactiveSMA() float32 {
+	if m != nil {
+		return m.PowerReactiveSMA
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetThdvSMA() float32 {
+	if m != nil {
+		return m.ThdvSMA
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetVoltageMin() float32 {
+	if m != nil {
+		return m.VoltageMin
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetCurrentMin() float32 {
+	if m != nil {
+		return m.CurrentMin
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerActiveMin() float32 {
+	if m != nil {
+		return m.PowerActiveMin
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetPowerReactiveMin() float32 {
+	if m != nil {
+		return m.PowerReactiveMin
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetThdvMin() float32 {
+	if m != nil {
+		return m.ThdvMin
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetMomentarySag() int32 {
+	if m != nil {
+		return m.MomentarySag
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetMomentarySwell() int32 {
+	if m != nil {
+		return m.MomentarySwell
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetTemporarySag() int32 {
+	if m != nil {
+		return m.TemporarySag
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetTemporarySwell() int32 {
+	if m != nil {
+		return m.TemporarySwell
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetSustainedUnderVoltage() int32 {
+	if m != nil {
+		return m.SustainedUnderVoltage
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetSustainedOverVoltage() int32 {
+	if m != nil {
+		return m.SustainedOverVoltage
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetProlongedUnderVoltage() int32 {
+	if m != nil {
+		return m.ProlongedUnderVoltage
+	}
+	return 0
+}
+
+func (m *PQMsgDatum) GetProlongedOverVoltage() int32 {
+	if m != nil {
+		return m.ProlongedOverVoltage
+	}
+	return 0
+}
+
+type GeoscanMsgData struct {
+	Rows                 []*GeoscanMsgDatum `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *GeoscanMsgData) Reset()         { *m = GeoscanMsgData{} }
+func (m *GeoscanMsgData) String() string { return proto.CompactTextString(m) }
+func (*GeoscanMsgData) ProtoMessage()    {}
+func (*GeoscanMsgData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{7}
+}
+
+func (m *GeoscanMsgData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GeoscanMsgData.Unmarshal(m, b)
+}
+func (m *GeoscanMsgData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GeoscanMsgData.Marshal(b, m, deterministic)
+}
+func (m *GeoscanMsgData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GeoscanMsgData.Merge(m, src)
+}
+func (m *GeoscanMsgData) XXX_Size() int {
+	return xxx_messageInfo_GeoscanMsgData.Size(m)
+}
+func (m *GeoscanMsgData) XXX_DiscardUnknown() {
+	xxx_messageInfo_GeoscanMsgData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GeoscanMsgData proto.InternalMessageInfo
+
+func (m *GeoscanMsgData) GetRows() []*GeoscanMsgDatum {
+	if m != nil {
+		return m.Rows
+	}
+	return nil
+}
+
+type GeoscanMsgDatum struct {
+	Timestamp            string   `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Rssid                string   `protobuf:"bytes,2,opt,name=rssid,proto3" json:"rssid,omitempty"`
+	Bssid                string   `protobuf:"bytes,3,opt,name=bssid,proto3" json:"bssid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GeoscanMsgDatum) Reset()         { *m = GeoscanMsgDatum{} }
+func (m *GeoscanMsgDatum) String() string { return proto.CompactTextString(m) }
+func (*GeoscanMsgDatum) ProtoMessage()    {}
+func (*GeoscanMsgDatum) Descriptor() ([]byte, []int) {
+	return fileDescriptor_60c109ad3fe637bb, []int{8}
+}
+
+func (m *GeoscanMsgDatum) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GeoscanMsgDatum.Unmarshal(m, b)
+}
+func (m *GeoscanMsgDatum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GeoscanMsgDatum.Marshal(b, m, deterministic)
+}
+func (m *GeoscanMsgDatum) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GeoscanMsgDatum.Merge(m, src)
+}
+func (m *GeoscanMsgDatum) XXX_Size() int {
+	return xxx_messageInfo_GeoscanMsgDatum.Size(m)
+}
+func (m *GeoscanMsgDatum) XXX_DiscardUnknown() {
+	xxx_messageInfo_GeoscanMsgDatum.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GeoscanMsgDatum proto.InternalMessageInfo
+
+func (m *GeoscanMsgDatum) GetTimestamp() string {
+	if m != nil {
+		return m.Timestamp
+	}
+	return ""
+}
+
+func (m *GeoscanMsgDatum) GetRssid() string {
+	if m != nil {
+		return m.Rssid
+	}
+	return ""
+}
+
+func (m *GeoscanMsgDatum) GetBssid() string {
+	if m != nil {
+		return m.Bssid
+	}
+	return ""
+}
+
 func init() {
-	proto.RegisterType((*InstMsgRequest)(nil), "ppdata.InstMsgRequest")
+	proto.RegisterType((*DataMsgRequest)(nil), "ppdata.DataMsgRequest")
 	proto.RegisterType((*InstMsgData)(nil), "ppdata.InstMsgData")
 	proto.RegisterType((*InstMsgDatum)(nil), "ppdata.InstMsgDatum")
+	proto.RegisterType((*ProcMsgData)(nil), "ppdata.ProcMsgData")
+	proto.RegisterType((*ProcMsgDatum)(nil), "ppdata.ProcMsgDatum")
+	proto.RegisterType((*PQMsgData)(nil), "ppdata.PQMsgData")
+	proto.RegisterType((*PQMsgDatum)(nil), "ppdata.PQMsgDatum")
+	proto.RegisterType((*GeoscanMsgData)(nil), "ppdata.GeoscanMsgData")
+	proto.RegisterType((*GeoscanMsgDatum)(nil), "ppdata.GeoscanMsgDatum")
 }
 
 func init() { proto.RegisterFile("data-service.proto", fileDescriptor_60c109ad3fe637bb) }
 
 var fileDescriptor_60c109ad3fe637bb = []byte{
-	// 250 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0x41, 0x4f, 0xc2, 0x40,
-	0x10, 0x85, 0x5d, 0xa0, 0x18, 0x06, 0x43, 0xe2, 0x4a, 0xcc, 0xc6, 0x78, 0x68, 0x7a, 0xda, 0x8b,
-	0x3d, 0xe0, 0xc1, 0xa3, 0x17, 0x8c, 0x21, 0xd1, 0xcb, 0x8a, 0x3f, 0x60, 0x84, 0x09, 0x36, 0xb1,
-	0x74, 0xdd, 0x9d, 0xd6, 0xbf, 0x6f, 0xb6, 0x5b, 0x2c, 0x91, 0xe3, 0x7b, 0x6f, 0x32, 0xf3, 0xcd,
-	0x03, 0xb9, 0x45, 0xc6, 0x3b, 0x4f, 0xae, 0x29, 0x36, 0x94, 0x5b, 0x57, 0x71, 0x25, 0xc7, 0xd6,
-	0x06, 0x37, 0x7b, 0x81, 0xd9, 0x6a, 0xef, 0xf9, 0xd5, 0xef, 0x0c, 0x7d, 0xd7, 0xe4, 0x59, 0xde,
-	0xc2, 0xc4, 0x33, 0x3a, 0x5e, 0x17, 0x25, 0x29, 0x91, 0x0a, 0x9d, 0x98, 0xde, 0x08, 0xe9, 0x96,
-	0xc2, 0x9e, 0xa7, 0xf7, 0x95, 0x1a, 0xa4, 0x42, 0x4f, 0x4c, 0x6f, 0x64, 0x0f, 0x30, 0xed, 0xb6,
-	0x2d, 0x91, 0x51, 0x6a, 0x18, 0xb9, 0xea, 0xc7, 0x2b, 0x91, 0x0e, 0xf5, 0x74, 0x31, 0xcf, 0xe3,
-	0xcd, 0xbc, 0x1f, 0xa9, 0x4b, 0xd3, 0x4e, 0x64, 0x0d, 0x5c, 0x1c, 0xbb, 0xe1, 0x0c, 0x17, 0x25,
-	0x79, 0xc6, 0xd2, 0x1e, 0x20, 0xfe, 0x0c, 0x39, 0x87, 0xc4, 0x7e, 0xa2, 0xa7, 0x16, 0x20, 0x31,
-	0x51, 0x48, 0x05, 0xe7, 0x4d, 0xf5, 0xc5, 0xb8, 0x23, 0x35, 0x4c, 0x85, 0x1e, 0x98, 0x83, 0x0c,
-	0xc9, 0xa6, 0x76, 0x8e, 0xf6, 0xac, 0x46, 0x31, 0xe9, 0xe4, 0x62, 0x0d, 0x97, 0xcb, 0x96, 0x3e,
-	0xf0, 0xbe, 0xc5, 0x86, 0xe4, 0x23, 0xcc, 0x9e, 0x89, 0x8f, 0x1f, 0xb9, 0xfe, 0x87, 0xde, 0x75,
-	0x75, 0x73, 0x75, 0xfa, 0x12, 0x66, 0x67, 0x1f, 0xe3, 0xb6, 0xe3, 0xfb, 0xdf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xc3, 0x74, 0xdf, 0x7c, 0x79, 0x01, 0x00, 0x00,
+	// 782 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0x5f, 0x4b, 0x3b, 0x47,
+	0x14, 0x35, 0x89, 0x31, 0xbf, 0xdc, 0xc4, 0x68, 0xc6, 0xa8, 0x53, 0x29, 0x25, 0x2c, 0x22, 0xa1,
+	0xa5, 0x3e, 0x68, 0xa1, 0x0f, 0xa5, 0x14, 0x41, 0x11, 0xa1, 0xa1, 0xba, 0xa9, 0x7d, 0xe9, 0xd3,
+	0x98, 0x8c, 0x71, 0x20, 0x3b, 0xbb, 0x9d, 0x99, 0xc4, 0xf6, 0xa3, 0xf4, 0x8b, 0xf4, 0xa9, 0xf4,
+	0xb3, 0x95, 0x3b, 0xb3, 0x7f, 0x66, 0x37, 0xf9, 0x11, 0xf0, 0x2d, 0xf7, 0x9c, 0xb3, 0xf7, 0xde,
+	0x39, 0x7b, 0xef, 0x4e, 0x80, 0xcc, 0x98, 0x61, 0xdf, 0x6a, 0xae, 0x56, 0x62, 0xca, 0x2f, 0x13,
+	0x15, 0x9b, 0x98, 0xec, 0x25, 0x09, 0xa2, 0xc1, 0xcf, 0xd0, 0xbb, 0x65, 0x86, 0x8d, 0xf5, 0x3c,
+	0xe4, 0x7f, 0x2c, 0xb9, 0x36, 0xe4, 0x4b, 0x68, 0x6b, 0xc3, 0x94, 0xf9, 0x55, 0x44, 0x9c, 0xd6,
+	0x86, 0xb5, 0x51, 0x3b, 0x2c, 0x00, 0x64, 0x67, 0x1c, 0xf3, 0xdc, 0x3d, 0x3f, 0xd0, 0xba, 0x63,
+	0x73, 0x20, 0xf8, 0x1e, 0x3a, 0x0f, 0x52, 0x9b, 0xb1, 0x9e, 0x63, 0x52, 0x32, 0x82, 0x5d, 0x15,
+	0xbf, 0x6b, 0x5a, 0x1b, 0x36, 0x46, 0x9d, 0xab, 0xc1, 0xa5, 0xab, 0x79, 0x59, 0x48, 0x96, 0x51,
+	0x68, 0x15, 0xc1, 0x7f, 0x35, 0xe8, 0xfa, 0x30, 0xd6, 0x31, 0x22, 0xe2, 0xda, 0xb0, 0x28, 0xc9,
+	0xba, 0xc8, 0x01, 0x32, 0x80, 0x66, 0xf2, 0xc6, 0x34, 0xb7, 0x1d, 0x34, 0x43, 0x17, 0x90, 0x21,
+	0x74, 0xd8, 0xd4, 0x88, 0x15, 0x4f, 0xe2, 0x77, 0xae, 0x68, 0x63, 0x58, 0x1b, 0xd5, 0x43, 0x1f,
+	0x22, 0xe7, 0xb0, 0xaf, 0xb8, 0xaf, 0xd9, 0xb5, 0x9a, 0x32, 0x48, 0x28, 0xb4, 0xa6, 0x4b, 0xa5,
+	0xb8, 0x34, 0xb4, 0x69, 0xf9, 0x2c, 0x44, 0x66, 0x15, 0x2f, 0x0c, 0x9b, 0x73, 0xba, 0xe7, 0x98,
+	0x34, 0xc4, 0x93, 0x3f, 0xaa, 0x78, 0xba, 0xe5, 0xe4, 0x85, 0x24, 0x3f, 0xf9, 0xbf, 0x75, 0xe8,
+	0xfa, 0xf0, 0x87, 0x4e, 0x7e, 0x0e, 0xfb, 0x8b, 0x38, 0x4e, 0x44, 0x94, 0xf0, 0x19, 0x93, 0x53,
+	0x6e, 0xcf, 0xde, 0x0c, 0xcb, 0x20, 0x21, 0xb0, 0xab, 0xb4, 0x16, 0xf6, 0xd0, 0xcd, 0xd0, 0xfe,
+	0x26, 0x87, 0xd0, 0xd0, 0x52, 0xd9, 0x73, 0x36, 0x43, 0xfc, 0x49, 0xce, 0xe0, 0x13, 0x5b, 0x88,
+	0x15, 0x9f, 0x4a, 0x63, 0x0f, 0xd9, 0x0c, 0xf3, 0x18, 0xab, 0x6b, 0x26, 0x5e, 0x05, 0x6d, 0xb9,
+	0xea, 0x36, 0x40, 0x57, 0x22, 0x1e, 0xbd, 0x2a, 0xce, 0xe9, 0x27, 0x8b, 0x67, 0x21, 0x32, 0x86,
+	0x47, 0x09, 0xa6, 0x6a, 0x3b, 0x26, 0x0d, 0x49, 0x00, 0x5d, 0xbd, 0xd4, 0x86, 0x09, 0xc9, 0x67,
+	0x48, 0x83, 0xa5, 0x4b, 0x18, 0x6a, 0x12, 0x15, 0x2f, 0x62, 0x39, 0x77, 0x9a, 0x8e, 0xd3, 0xf8,
+	0x58, 0x70, 0x0d, 0xed, 0xc7, 0xa7, 0xcc, 0xf5, 0x8b, 0x92, 0xeb, 0x24, 0x77, 0xfd, 0xa9, 0xe2,
+	0xf9, 0x3f, 0x2d, 0x80, 0x02, 0xfc, 0x90, 0xe3, 0x5f, 0x01, 0xa4, 0xaf, 0x7e, 0xcc, 0xfe, 0x4c,
+	0x47, 0xcd, 0x43, 0x90, 0x4f, 0x87, 0x06, 0x79, 0x37, 0x66, 0x1e, 0x42, 0x2e, 0xa0, 0x67, 0x87,
+	0xed, 0xc6, 0xce, 0x1d, 0x6a, 0xdc, 0xa8, 0x55, 0x50, 0xf2, 0x35, 0x1c, 0x5a, 0x24, 0x4c, 0x27,
+	0x14, 0x95, 0x6e, 0xf4, 0xd6, 0x70, 0xeb, 0xf6, 0xdb, 0x6c, 0x85, 0x92, 0x96, 0x9b, 0xce, 0x34,
+	0xf4, 0xba, 0x9d, 0x8c, 0x6f, 0xec, 0x4b, 0x2a, 0xba, 0x9d, 0x8c, 0x6f, 0xbc, 0x6e, 0x91, 0x6f,
+	0x97, 0xba, 0x45, 0xbe, 0xdc, 0x2d, 0x6a, 0x60, 0xad, 0x5b, 0xd4, 0x55, 0xbb, 0x45, 0x65, 0x67,
+	0x43, 0xb7, 0xa8, 0x4d, 0xbb, 0x45, 0x49, 0xb7, 0xe8, 0x36, 0xed, 0x26, 0x73, 0x52, 0x48, 0xba,
+	0x5f, 0xf6, 0x56, 0x48, 0xdf, 0x5b, 0x21, 0x69, 0xaf, 0xec, 0xad, 0x90, 0x55, 0x6f, 0x85, 0xa4,
+	0x07, 0xeb, 0xde, 0x0a, 0xb9, 0xee, 0xad, 0x90, 0xf4, 0x70, 0x93, 0xb7, 0x42, 0xe6, 0xde, 0x0a,
+	0x49, 0xfb, 0x9e, 0xb7, 0x42, 0xe2, 0x94, 0x46, 0x71, 0xc4, 0xa5, 0x61, 0xea, 0xaf, 0x09, 0x9b,
+	0x53, 0xe2, 0xa6, 0xd4, 0xc7, 0xb0, 0xa3, 0x22, 0x7e, 0xe7, 0x8b, 0x05, 0x3d, 0xb2, 0xaa, 0x0a,
+	0x8a, 0xb9, 0x70, 0x41, 0x62, 0x95, 0xe6, 0x1a, 0xb8, 0x5c, 0x3e, 0x86, 0xb9, 0x8a, 0xd8, 0xe6,
+	0x3a, 0x76, 0xb9, 0xca, 0x28, 0xf9, 0x0e, 0x8e, 0xf3, 0x6d, 0x7a, 0x96, 0x33, 0xae, 0x7e, 0x4b,
+	0xbf, 0x5c, 0x27, 0x56, 0xbe, 0x99, 0x24, 0x57, 0x30, 0xc8, 0x89, 0x5f, 0x56, 0xc5, 0x43, 0xa7,
+	0xf6, 0xa1, 0x8d, 0x1c, 0x56, 0xca, 0x77, 0xb2, 0x54, 0x89, 0xba, 0x4a, 0x1b, 0x49, 0xac, 0x94,
+	0x13, 0x7e, 0xa5, 0x2f, 0x5c, 0xa5, 0x4d, 0x5c, 0xf0, 0x23, 0xf4, 0xee, 0x79, 0xac, 0xa7, 0x4c,
+	0x66, 0x2b, 0xff, 0x4d, 0x69, 0xe5, 0x4f, 0xb3, 0x95, 0x2f, 0xa9, 0xf2, 0xbd, 0xff, 0x1d, 0x0e,
+	0x2a, 0xc4, 0xf6, 0xdd, 0xc7, 0xaf, 0xe4, 0x2c, 0xbd, 0xe9, 0x5c, 0x80, 0xe8, 0x8b, 0x45, 0x1b,
+	0x0e, 0xb5, 0xc1, 0xd5, 0xdf, 0x75, 0xe8, 0xdf, 0xda, 0x9b, 0x10, 0x1b, 0x9b, 0xb8, 0xdb, 0x96,
+	0xfc, 0x84, 0x1d, 0x1b, 0xff, 0x52, 0x3c, 0xc9, 0x7a, 0x2c, 0xdf, 0xbb, 0x67, 0x47, 0xeb, 0xd7,
+	0x23, 0x0b, 0x76, 0xd2, 0x04, 0xfe, 0xdd, 0xb2, 0x35, 0x81, 0x27, 0x0e, 0x76, 0xc8, 0x0f, 0xd0,
+	0xc5, 0x04, 0x4f, 0xdb, 0x1e, 0xef, 0x57, 0x3f, 0x97, 0xf8, 0xf0, 0x1d, 0xf4, 0xef, 0xb9, 0xa9,
+	0x78, 0xfe, 0xb9, 0x0c, 0x27, 0x1b, 0xdd, 0x67, 0xc1, 0xce, 0xcb, 0x9e, 0xfd, 0xd3, 0x71, 0xfd,
+	0x7f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x88, 0xa0, 0x90, 0x1c, 0x8a, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -213,7 +790,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type DeviceDataServiceClient interface {
-	GetInstMsgData(ctx context.Context, in *InstMsgRequest, opts ...grpc.CallOption) (*InstMsgData, error)
+	GetInstMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*InstMsgData, error)
+	GetProcMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*ProcMsgData, error)
+	GetPQMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*PQMsgData, error)
+	GetGeoscanMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*GeoscanMsgData, error)
 }
 
 type deviceDataServiceClient struct {
@@ -224,7 +804,7 @@ func NewDeviceDataServiceClient(cc *grpc.ClientConn) DeviceDataServiceClient {
 	return &deviceDataServiceClient{cc}
 }
 
-func (c *deviceDataServiceClient) GetInstMsgData(ctx context.Context, in *InstMsgRequest, opts ...grpc.CallOption) (*InstMsgData, error) {
+func (c *deviceDataServiceClient) GetInstMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*InstMsgData, error) {
 	out := new(InstMsgData)
 	err := c.cc.Invoke(ctx, "/ppdata.DeviceDataService/GetInstMsgData", in, out, opts...)
 	if err != nil {
@@ -233,17 +813,56 @@ func (c *deviceDataServiceClient) GetInstMsgData(ctx context.Context, in *InstMs
 	return out, nil
 }
 
+func (c *deviceDataServiceClient) GetProcMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*ProcMsgData, error) {
+	out := new(ProcMsgData)
+	err := c.cc.Invoke(ctx, "/ppdata.DeviceDataService/GetProcMsgData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceDataServiceClient) GetPQMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*PQMsgData, error) {
+	out := new(PQMsgData)
+	err := c.cc.Invoke(ctx, "/ppdata.DeviceDataService/GetPQMsgData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceDataServiceClient) GetGeoscanMsgData(ctx context.Context, in *DataMsgRequest, opts ...grpc.CallOption) (*GeoscanMsgData, error) {
+	out := new(GeoscanMsgData)
+	err := c.cc.Invoke(ctx, "/ppdata.DeviceDataService/GetGeoscanMsgData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeviceDataServiceServer is the server API for DeviceDataService service.
 type DeviceDataServiceServer interface {
-	GetInstMsgData(context.Context, *InstMsgRequest) (*InstMsgData, error)
+	GetInstMsgData(context.Context, *DataMsgRequest) (*InstMsgData, error)
+	GetProcMsgData(context.Context, *DataMsgRequest) (*ProcMsgData, error)
+	GetPQMsgData(context.Context, *DataMsgRequest) (*PQMsgData, error)
+	GetGeoscanMsgData(context.Context, *DataMsgRequest) (*GeoscanMsgData, error)
 }
 
 // UnimplementedDeviceDataServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedDeviceDataServiceServer struct {
 }
 
-func (*UnimplementedDeviceDataServiceServer) GetInstMsgData(ctx context.Context, req *InstMsgRequest) (*InstMsgData, error) {
+func (*UnimplementedDeviceDataServiceServer) GetInstMsgData(ctx context.Context, req *DataMsgRequest) (*InstMsgData, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInstMsgData not implemented")
+}
+func (*UnimplementedDeviceDataServiceServer) GetProcMsgData(ctx context.Context, req *DataMsgRequest) (*ProcMsgData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProcMsgData not implemented")
+}
+func (*UnimplementedDeviceDataServiceServer) GetPQMsgData(ctx context.Context, req *DataMsgRequest) (*PQMsgData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPQMsgData not implemented")
+}
+func (*UnimplementedDeviceDataServiceServer) GetGeoscanMsgData(ctx context.Context, req *DataMsgRequest) (*GeoscanMsgData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGeoscanMsgData not implemented")
 }
 
 func RegisterDeviceDataServiceServer(s *grpc.Server, srv DeviceDataServiceServer) {
@@ -251,7 +870,7 @@ func RegisterDeviceDataServiceServer(s *grpc.Server, srv DeviceDataServiceServer
 }
 
 func _DeviceDataService_GetInstMsgData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstMsgRequest)
+	in := new(DataMsgRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -263,7 +882,61 @@ func _DeviceDataService_GetInstMsgData_Handler(srv interface{}, ctx context.Cont
 		FullMethod: "/ppdata.DeviceDataService/GetInstMsgData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DeviceDataServiceServer).GetInstMsgData(ctx, req.(*InstMsgRequest))
+		return srv.(DeviceDataServiceServer).GetInstMsgData(ctx, req.(*DataMsgRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeviceDataService_GetProcMsgData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataMsgRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceDataServiceServer).GetProcMsgData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ppdata.DeviceDataService/GetProcMsgData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceDataServiceServer).GetProcMsgData(ctx, req.(*DataMsgRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeviceDataService_GetPQMsgData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataMsgRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceDataServiceServer).GetPQMsgData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ppdata.DeviceDataService/GetPQMsgData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceDataServiceServer).GetPQMsgData(ctx, req.(*DataMsgRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeviceDataService_GetGeoscanMsgData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataMsgRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceDataServiceServer).GetGeoscanMsgData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ppdata.DeviceDataService/GetGeoscanMsgData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceDataServiceServer).GetGeoscanMsgData(ctx, req.(*DataMsgRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -275,6 +948,18 @@ var _DeviceDataService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetInstMsgData",
 			Handler:    _DeviceDataService_GetInstMsgData_Handler,
+		},
+		{
+			MethodName: "GetProcMsgData",
+			Handler:    _DeviceDataService_GetProcMsgData_Handler,
+		},
+		{
+			MethodName: "GetPQMsgData",
+			Handler:    _DeviceDataService_GetPQMsgData_Handler,
+		},
+		{
+			MethodName: "GetGeoscanMsgData",
+			Handler:    _DeviceDataService_GetGeoscanMsgData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

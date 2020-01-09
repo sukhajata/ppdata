@@ -2,8 +2,9 @@ syntax = "proto3";
 
 package ppdata;
 
-message InstMsgRequest {
-    int32 startTime = 1;
+
+message DataMsgRequest {
+    string startTime = 1;
     string deviceEUI = 2;
 }
 
@@ -12,12 +13,80 @@ message InstMsgData {
 }
 
 message InstMsgDatum {
-    int32 timestamp = 1;
+    string timestamp = 1;
     int32 phase = 2;
-    float voltage = 3;
-    float current = 4;
+    float activepower = 3;
+    float reactivepower = 4;
+    float current = 5;
+    float voltage = 6;
+}
+
+message ProcMsgData {
+    repeated ProcMsgDatum rows = 1;
+}
+
+message ProcMsgDatum {
+    string timestamp = 1;
+    int32 phase = 2;
+	int32 loopimpedance = 3;
+	int32 rssi = 4;
+	int32 snr = 5;
+    int32 alivecnt = 6;
+    int32 saifi = 7;
+    int32 memfree = 8;
+    int32 tempcnt = 9;
+    int32 sustainedcnt = 10;
+    int32 prolongedcnt = 11;
+}
+
+message PQMsgData {
+    repeated PQMsgDatum rows = 1;
+}
+
+message PQMsgDatum {
+    string timestamp = 1;
+    int32 phase = 2;
+    float voltageMax = 3;
+    float currentMax = 4;
+    float powerActiveMax = 5;
+    float powerReactiveMax = 6;
+    float thdvMax = 7;
+    float voltageSMA = 8;
+    float currentSMA = 9;
+    float powerActiveSMA = 10;
+    float powerReactiveSMA = 11;
+    float thdvSMA = 12;
+    float voltageMin = 13;
+    float currentMin = 14;
+    float powerActiveMin = 15;
+    float powerReactiveMin = 16;
+    float thdvMin = 17;
+    int32 momentarySag = 18;
+    int32 momentarySwell = 19;
+    int32 temporarySag = 20;
+    int32 temporarySwell = 21;
+    int32 sustainedUnderVoltage = 22;
+    int32 sustainedOverVoltage = 23;
+    int32 prolongedUnderVoltage = 24;
+    int32 prolongedOverVoltage = 25;
+}
+
+message GeoscanMsgData {
+    repeated GeoscanMsgDatum rows = 1;
+}
+
+message GeoscanMsgDatum {
+    string timestamp = 1;
+    string rssid = 2;
+    string bssid = 3;
 }
 
 service DeviceDataService {
-    rpc GetInstMsgData(InstMsgRequest) returns (InstMsgData) {}
+    rpc GetInstMsgData(DataMsgRequest) returns (InstMsgData) {}
+
+    rpc GetProcMsgData(DataMsgRequest) returns (ProcMsgData) {}
+
+    rpc GetPQMsgData(DataMsgRequest) returns (PQMsgData) {}
+
+    rpc GetGeoscanMsgData(DataMsgRequest) returns (GeoscanMsgData) {}
 }
